@@ -9,14 +9,23 @@ branches:
 before_install:
   - sudo rm -rf /var/lib/apt/lists/*
   - sudo apt-get update
-  - sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
-  - sudo rm -rf /opt/pyenv
-  - curl https://pyenv.run | bash
-  - export PATH="$HOME/.pyenv/bin:$PATH"
-  - eval "$(pyenv init -)"
-  - eval "$(pyenv virtualenv-init -)"
-  - pyenv install 3.8.0
-  - pyenv glo
+  - sudo apt-get install -y python3.8
+  - python3.8 --version # Verificamos la versión de Python
+  - sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+  - python3 --version # Verificamos la versión de Python
+  - pip3 install --upgrade pip
+  - pip3 install virtualenv
+
+install:
+  # Configura el entorno virtual de Python
+  - virtualenv -p python3.8 venv
+  - source venv/bin/activate
+
+  # Instala las dependencias de Python
+  - curl https://sdk.cloud.google.com | CLOUDSDK_CORE_DISABLE_PROMPTS=1 bash
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  - gcloud components update --quiet
+  - gcloud config set disable_prompts true
 
 # [START travis_deploy]
 deploy:
