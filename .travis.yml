@@ -26,6 +26,7 @@ install:
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update --quiet
   - gcloud config set disable_prompts true
+  - gcloud config set disable_usage_reporting false
 
 # [START travis_deploy]
 deploy:
